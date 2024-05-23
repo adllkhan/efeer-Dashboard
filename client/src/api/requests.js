@@ -1,27 +1,34 @@
 import axios from "axios";
-import { AxiosError } from "axios";
+
+export async function getEvents(page, limit) {
+  const params = { page: page, limit: limit };
+  const response = await axios
+    .get("http://localhost:5000/api/events", { params: params })
+    .catch((error) => {
+      console.error(error);
+    });
+  return response;
+}
+
+export async function sendEvent(eventId, agentId) {
+  const payload = {
+    event_id: eventId,
+    agent_id: agentId,
+  };
+
+  const response = await axios
+    .post("http://localhost:5000/api/events/send", payload)
+    .catch((error) => {
+      console.error(error);
+    });
+  return response;
+}
 
 export async function getAgents() {
-  let agents = await axios.get("http://127.0.0.1:5000/api/v1/agents");
-  return agents;
-}
-
-export async function getEvents() {
-  try {
-    let events = await axios.get(
-      "http://127.0.0.1:5000/api/v1/events/ "
-    );
-    return events;
-  } catch (AxiosError) {
-    return false;
-  }
-}
-
-export async function sendEvent(event_id, agent_id) {
-  let params = { params: { event_id: event_id, agent_id: agent_id } };
-  let events = await axios.get(
-    "http://127.0.0.1:5000/api/v1/events/send",
-    params
-  );
-  return events;
+  const response = await axios
+    .get("http://localhost:5000/api/agents")
+    .catch((error) => {
+      console.error(error);
+    });
+  return response;
 }

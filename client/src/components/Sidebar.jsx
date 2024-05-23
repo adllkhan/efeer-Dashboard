@@ -2,30 +2,30 @@ import Link from "next/link";
 
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 
-
 export function Sidebar(props) {
   return (
-    <aside className="fixed top-0 left-0 z-40 transition-transform -translate-x-full sm:translate-x-0  bg-neutral-900 w-20 h-screen flex items-center border-r border-red-500 dark:border-yellow-500 flex-col">
-      <Link href="/" className="p-4 w-max">
-        <div className="font-ubuntu text-xl text-white">
-          ef<p className="inline-block text-red-500 dark:text-yellow-500">ee</p>r
+    <aside className="fixed top-0 left-0 z-40 transition-all -translate-x-full sm:translate-x-0 bg-gray-50 dark:bg-neutral-900 w-20 h-screen flex items-center border-r shadow-lg border-blue-600 dark:border-yellow-500 flex-col">
+      <Link href="/" className="p-4 w-max group">
+        <div className="font-ubuntu text-xl text-black dark:text-white">
+          ef<p className="inline-block group-hover:mx-0.5 text-blue-600 dark:text-yellow-500  transition-all duration-200">ee</p>
+          r
         </div>
       </Link>
       <div className="h-full flex flex-col items-center justify-between">
-        <div className="mt-3 flex flex-col items-center space-y-5">
+        <div className="mt-3 flex flex-col items-center space-y-3">
           <Link
             href="/dashboard"
             className={
               props.page === "dashboard"
-                ? "border border-red-500 dark:border-yellow-500 p-2 rounded-md bg-red-500/5 dark:bg-yellow-500/5 hover:bg-red-500/10 dark:hover:bg-yellow-500/10 transition-all duration-100"
-                : "border border-neutral-500 p-2 rounded-md hover:bg-neutral-500/20 transition-all duration-100"
+                ? "group shadow-md p-3 rounded-md bg-blue-600/5 dark:bg-yellow-500/5 hover:bg-blue-600/10 dark:hover:bg-yellow-500/10 transition-colors duration-200"
+                : "group p-2 rounded-md hover:bg-white dark:hover:bg-neutral-800 transition-colors duration-200"
             }
           >
             <svg
               className={
                 props.page === "dashboard"
-                  ? "w-4 h-4 text-red-500 dark:text-yellow-500"
-                  : "w-4 h-4 text-white"
+                  ? "group-hover:scale-110 transition-transform duration-200 w-4 h-4 text-blue-600 dark:text-yellow-500"
+                  : "group-hover:scale-110 transition-transform duration-200 w-4 h-4 text-black dark:text-white"
               }
               width="15"
               height="15"
@@ -38,6 +38,7 @@ export function Sidebar(props) {
                 fill="currentColor"
                 fillRule="evenodd"
                 clipRule="evenodd"
+                className=""
               ></path>
             </svg>
           </Link>
@@ -45,43 +46,44 @@ export function Sidebar(props) {
             href="/agents"
             className={
               props.page === "agents"
-                ? "border border-yellow-500 p-2 rounded-md bg-yellow-500/5 hover:bg-yellow-500/10 transition-all duration-100"
-                : "border border-neutral-500 p-2 rounded-md hover:bg-neutral-500/20 transition-all duration-100"
+              ? "group shadow-md p-3 rounded-md bg-blue-600/5 dark:bg-yellow-500/5 hover:bg-blue-600/10 dark:hover:bg-yellow-500/10 transition-colors duration-200"
+              : "group p-2 rounded-md hover:bg-white dark:hover:bg-neutral-800 transition-colors duration-200"
             }
           >
             <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
               className={
                 props.page === "agents"
-                ? "w-4 h-4 text-yellow-500"
-                : "w-4 h-4 text-white"
+                  ? "group-hover:-skew-y-12 transition-transform duration-200 w-4 h-4 text-blue-600 dark:text-yellow-500"
+                  : "group-hover:-skew-y-12 transition-transform duration-200 w-4 h-4 text-black dark:text-white"
               }
-              width="15"
-              height="15"
-              viewBox="0 0 15 15"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M0.877014 7.49988C0.877014 3.84219 3.84216 0.877045 7.49985 0.877045C11.1575 0.877045 14.1227 3.84219 14.1227 7.49988C14.1227 11.1575 11.1575 14.1227 7.49985 14.1227C3.84216 14.1227 0.877014 11.1575 0.877014 7.49988ZM7.49985 1.82704C4.36683 1.82704 1.82701 4.36686 1.82701 7.49988C1.82701 8.97196 2.38774 10.3131 3.30727 11.3213C4.19074 9.94119 5.73818 9.02499 7.50023 9.02499C9.26206 9.02499 10.8093 9.94097 11.6929 11.3208C12.6121 10.3127 13.1727 8.97172 13.1727 7.49988C13.1727 4.36686 10.6328 1.82704 7.49985 1.82704ZM10.9818 11.9787C10.2839 10.7795 8.9857 9.97499 7.50023 9.97499C6.01458 9.97499 4.71624 10.7797 4.01845 11.9791C4.97952 12.7272 6.18765 13.1727 7.49985 13.1727C8.81227 13.1727 10.0206 12.727 10.9818 11.9787ZM5.14999 6.50487C5.14999 5.207 6.20212 4.15487 7.49999 4.15487C8.79786 4.15487 9.84999 5.207 9.84999 6.50487C9.84999 7.80274 8.79786 8.85487 7.49999 8.85487C6.20212 8.85487 5.14999 7.80274 5.14999 6.50487ZM7.49999 5.10487C6.72679 5.10487 6.09999 5.73167 6.09999 6.50487C6.09999 7.27807 6.72679 7.90487 7.49999 7.90487C8.27319 7.90487 8.89999 7.27807 8.89999 6.50487C8.89999 5.73167 8.27319 5.10487 7.49999 5.10487Z"
-                fill="currentColor"
-                fillRule="evenodd"
-                clipRule="evenodd"
-              ></path>
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+              />
             </svg>
           </Link>
+        </div>
+        <div className="mb-6 flex flex-col justify-center items-center space-y-3">
           <Link
             href="/settings"
             className={
               props.page === "settings"
-                ? "border border-yellow-500 p-2 rounded-md bg-yellow-500/5 hover:bg-yellow-500/10 transition-all duration-100"
-                : "border border-neutral-500 p-2 rounded-md hover:bg-neutral-500/20 transition-all duration-100"
+              ? "group shadow-md p-3 rounded-md bg-blue-600/5 dark:bg-yellow-500/5 hover:bg-blue-600/10 dark:hover:bg-yellow-500/10 transition-colors duration-200"
+              : "group p-2 rounded-md hover:bg-white dark:hover:bg-neutral-800 transition-colors duration-200"
             }
           >
             <svg
               className={
                 props.page === "settings"
-                  ? "w-4 h-4 text-yellow-500"
-                  : "w-4 h-4 text-white"
+                  ? "group-hover:rotate-45 transition-transform duration-200 w-4 h-4 text-blue-600 dark:text-yellow-500"
+                  : "group-hover:rotate-45 transition-transform duration-200 w-4 h-4 text-black dark:text-white"
               }
               width="15"
               height="15"
@@ -97,8 +99,6 @@ export function Sidebar(props) {
               ></path>
             </svg>
           </Link>
-        </div>
-        <div className="mb-6">
           <ThemeSwitcher />
         </div>
       </div>

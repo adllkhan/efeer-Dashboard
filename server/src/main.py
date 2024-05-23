@@ -7,50 +7,52 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.v1 import (
-    router_events, router_agents, router_token,
-    init_db,
+from api import (
+    router_events, router_agents,
     run_bot, stop_bot,
-    Config
+    ServerConfig, CORSConfig
 )
+from settings import Settings, Description
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator:
-    await init_db()
-    asyncio.create_task(
-        run_bot()
-    )
+    try:
+        asyncio.create_task(
+            run_bot()
+        )
+    except KeyboardInterrupt:
+        print("Exit")
     yield
     await stop_bot()
 
 app = FastAPI(
     lifespan=lifespan,
-    title=Config().TITLE,
-    version=Config().VERSION,
-    description=Config().DESCRIPTION
+    title=Description().TITLE,
+    description=Description().DESCRIPTION,
+    version=Description().VERSION
 )
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=Config().CLIENT_HOST,
-    allow_credentials=Config().CORS_CREDENTIALS,
-    allow_methods=list(Config().CORS_METHODS),
-    allow_headers=list(Config().CORS_HEADERS),
+    allow_origins=[CORSConfig().CLIENT_HOST, CORSConfig().WAZUH_HOST],
+    allow_credentials=Settings().ALLOW_CREDENTIALS,
+    allow_methods=Settings().ALLOW_METHODS,
+    allow_headers=Settings().ALLOW_HEADERS,
 )
 
-app.include_router(router=router_events, prefix="/api/v1", tags=["Events"])
-app.include_router(router=router_agents, prefix="/api/v1", tags=["Agents"])
-app.include_router(router=router_token, prefix="/api/v1", tags=["Token"])
+app.include_router(router=router_events, prefix="/api", tags=["Events"])
+app.include_router(router=router_agents, prefix="/api", tags=["Agents"])
 
 if __name__ == "__main__":
+    logging.info(logging.INFO)
+
     try:
-        logging.info(logging.INFO)
         uvicorn.run(
             app="main:app",
-            host=Config().SERVER_HOST,
-            port=Config().SERVER_PORT,
-            reload=True
+            host=ServerConfig().HOST,
+            port=ServerConfig().PORT,
+            reload=Settings().SERVER_RELOAD
         )
     except KeyboardInterrupt:
         print("Exit")
