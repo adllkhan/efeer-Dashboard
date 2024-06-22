@@ -1,17 +1,15 @@
-"use client";
-
-import { Suspense } from "react";
 import { Sidebar } from "@/components/Sidebar";
 import { Agents } from "@/components/Agents";
-import LoadingSkeleton from "@/components/LoadingSkeleton";
+import { Header } from "@/components/Header";
 
-export default function AgentsPage() {
+
+export default function AgentsPage(searchParams) {
   return (
     <div className="w-full h-full">
       <Sidebar page="agents" />
       <div className="sm:ml-20">
-        <h1 className="m-6 text-lg">Agents</h1>
-        <Agents />
+        <Header header="Agents" />
+        <Agents page={searchParams.searchParams.page}/>
       </div>
     </div>
   );

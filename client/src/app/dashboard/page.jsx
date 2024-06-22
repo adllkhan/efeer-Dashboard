@@ -7,8 +7,8 @@ export default function Dashboard(searchParams) {
     <div className="w-full h-full">
       <Sidebar page="dashboard" />
       <div className="sm:ml-20">
-        <Header />
-        <Events page={searchParams.page}/>
+        <Header header="Events Dashboard"/>
+        <Events page={searchParams.searchParams.page}/>
       </div>
     </div>
   );

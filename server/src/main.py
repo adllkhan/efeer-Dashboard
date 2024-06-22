@@ -8,7 +8,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from api import (
-    router_events, router_agents,
+    router_events, router_agents, router_report,
     run_bot, stop_bot,
     ServerConfig, CORSConfig
 )
@@ -43,6 +43,8 @@ app.add_middleware(
 
 app.include_router(router=router_events, prefix="/api", tags=["Events"])
 app.include_router(router=router_agents, prefix="/api", tags=["Agents"])
+app.include_router(router=router_report, prefix="/api", tags=["Report"])
+
 
 if __name__ == "__main__":
     logging.info(logging.INFO)

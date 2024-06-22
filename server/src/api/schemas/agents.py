@@ -11,6 +11,7 @@ class Agent(BaseModel):
 class AgentOut(BaseModel):
     id: str = Field(alias="_id")
     name: str
+    token: str | None = None
 
 
 class AgentIn(BaseModel):

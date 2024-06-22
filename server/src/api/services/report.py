@@ -7,10 +7,9 @@ class ReportService:
         env = Environment(loader=FileSystemLoader("./server/src/templates"))
         template = env.get_template("report.html")
         template = env.get_template("report.html")
-        template = HTML(/
+        template = HTML(
             string=template.render(
-                keys=event.keys(),
-                values=event.values()
+                event=event
             )
         )
         template.write_pdf(target="./server/src/reports/report.pdf")

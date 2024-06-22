@@ -1,85 +1,55 @@
-"use client"
-
+import { Button } from "@/components/ui/button";
 import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "@radix-ui/react-accordion";
-import { useEffect } from "react";
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { getAgents } from "@/api/requests";
-import CopyClipboardButton from "./CopyClipboardButton";
+import { NotFound } from "./NotFound";
+import Paginate from "./Pagination";
+import TokenForm from "./TokenForm";
 
-export function Agents({ attributes, dispatch }) {
-  useEffect(() => {
-    getAgents().then(res => {
-           dispatch(AttribAction.set(objectToArray(res.data)));
-        });
-}, [])
-  console.log(attributes)
+export async function Agents(props) {
+  const response = await getAgents(Number(props.page) || 1, 10);
+  console.log(response.data);
 
-  return (
-    <Accordion
-      type="single"
-      collapsible
-      className="w-full mt-3 pointer-events-auto"
-    >
-      {attributes.agents.map((agent, index) => (
-        <AccordionItem
-          value={"item-" + index}
-          className="mx-2 mb-2 border-0 shadow dark:border-b border-neutral-800 rounded-xl group hover:bg-white dark:hover:bg-neutral-800"
-        >
-          <AccordionTrigger className="mx-6 pointer-events-auto hover:no-underline ">
-            <div className="flex justify-between w-full">
-              <div className="flex">
-                <p>{agent.id}</p>
-                <p className="text-black dark:text-white ml-10 w-80 truncate text-left group-hover:underline group-hover:-translate-y-0.5 underline-offset-4 decoration-blue-600 dark:decoration-yellow-500">
-                  {agent.name}
-                </p>
-                <p className="w-20 ml-10 text-left text-black truncate dark:text-white">
-                  {agent.ip}
-                </p>
+  return !response ? (
+    <NotFound className="pt-3 mt-24" message="Cannot connect to efeer API." />
+  ) : response.status > 200 ? (
+    <NotFound className="mt-24" message={response.data.details} />
+  ) : (
+    <div className="flex flex-col gap-1 px-2 pt-3 mt-24">
+      {response.data.agents.map((agent, index) => (
+        <Sheet key={index} on>
+          <SheetTrigger asChild>
+            <Button className="justify-between w-full p-6 font-normal bg-white border-0 rounded-lg shadow text-md hover:bg-gray-100 dark:bg-neutral-900 dark:border-b dark:hover:bg-neutral-800 border-neutral-800 group">
+              <div className="flex gap-24">
+                <p className="text-black dark:text-white">{agent._id}</p>
+                <p className="text-black dark:text-white ">{agent.name}</p>
               </div>
-
-              <p className="mr-10 text-left text-black truncate dark:text-white w-72">
-                {agent.is_connected === true ? "Connected" : "Not connected"}
+              <p className="text-gray-500 group-hover:text-black dark:text-neutral-500 dark:group-hover:text-white group-hover:underline decoration-blue-600 dark:decoration-yellow-500 group-hover:-translate-y-0.5 underline-offset-4">
+                {agent.token ? "Connected" : "Click to connect"}
               </p>
-            </div>
-          </AccordionTrigger>
-          <AccordionContent className="text-xs">
-            <div className="flex mx-20">
-              <div className="flex items-start p-4 bg-white rounded-lg shadow dark:bg-neutral-800 dark:group-hover:bg-neutral-900 group-hover:bg-gray-50">
-                <div className="flex flex-col text-wrap w-96">
-                  {Object.keys(agent).map((key) =>
-                    typeof agent[key] === "object" && agent[key] !== null ? (
-                      <div>
-                        <p className="inline-block text-blue-600 dark:text-yellow-500">
-                          {key}
-                        </p>
-                        <div className="pl-1 ml-3 border-l border-l-neutral-700">
-                          {Object.keys(agent[key]).map((j) => (
-                            <p className="text-black dark:text-white">
-                              {`${j}: ` + agent[key][j]}
-                            </p>
-                          ))}
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="text-black dark:text-white">
-                        <p className="inline-block text-blue-600 dark:text-yellow-500">
-                          {`${key}:`}&nbsp;&nbsp;
-                        </p>
-                        {agent[key]}
-                      </div>
-                    )
-                  )}
-                </div>
-                <CopyClipboardButton data={agent} />
-              </div>
-            </div>
-          </AccordionContent>
-        </AccordionItem>
+            </Button>
+          </SheetTrigger>
+          <SheetContent
+            side="bottom"
+            className="border-blue-500 dark:border-t-yellow-500 dark:bg-neutral-900"
+          >
+            <SheetHeader>
+              <SheetTitle className="flex justify-between text-2xl font-thin">
+                {agent.name}
+              </SheetTitle>
+            </SheetHeader>
+            <TokenForm agent={agent} />
+          </SheetContent>
+        </Sheet>
       ))}
-    </Accordion>
+      {response.data.info.total > 10 ? (
+        <Paginate totalPages={String(response.data.info.pages)} />
+      ) : null}
+    </div>
   );
 }
